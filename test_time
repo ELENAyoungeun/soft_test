@@ -1,0 +1,61 @@
+import random
+import pandas as pd
+
+# 상수 정의
+num_columns = 5
+요일 = ["월요일", "화요일", "수요일", "목요일", "금요일"]
+수업_일정 = []
+
+# 과목 정의
+과목 = {
+    1: '확률과 통계', 2: '딥러닝', 3: 'AI알고리즘', 4: '기계학습',
+    5: 'AI수학', 6: '논리적문제해결1', 7: '인공지능기초', 8: '서비스러닝',
+    9: '논리적문제해결2', 10: '영상이해', 11: 'AI프로그래밍', 12: '리눅스운영체채',
+    13: '진로탐색', 14: '점심시간'
+}
+
+# 셔플된 과목 목록 생성
+과목_목록 = list(과목.keys()) * 2
+random.shuffle(과목_목록)
+
+# 수업 일정 생성
+num = 0
+for _ in range(len(요일)):
+    요일_일정 = []
+    if num == 50:
+        break
+    for j in range(num_columns):
+        if num == 50:
+            break
+        현재_열 = []
+        num_values = 4 if j == 2 else 5
+        for _ in range(num_values):
+            if not 과목_목록:
+                break
+        try:
+            과목_ID = 과목_목록.pop()
+            if 과목_ID not in 현재_열:
+                현재_열.append(과목_ID)
+            else:
+                raise Exception("중복 과목 할당")
+        except IndexError:
+            break
+        except Exception as e:
+            print(f"예외 발생: {e}")
+
+
+# 과목 ID를 과목 이름으로 변환
+수업_일정 = [[과목.get(과목_ID, 과목_ID) for 과목_ID in 요일] for 요일 in 수업_일정]
+
+# DataFrame 생성
+df = pd.DataFrame(수업_일정, columns=요일)
+
+# 수업 시간 인덱스 설정
+수업_시간 = [
+    "09:00 - 10:30", "10:30 - 12:00", "12:00 - 13:00",
+    "13:00 - 14:30", "14:30 - 16:00", "16:00 - 17:30"
+]
+df.index = 수업_시간
+
+# DataFrame 표시
+print(df)
